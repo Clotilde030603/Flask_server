@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+
+<body>
+    <div class="portfolio">
+        <div class="profile">
+            <div class="profile-picture">
+                <img src="../static/profile_picture.jpg" alt="Profile Picture">
+            </div>
+
+            <div class="profile-details">
+                <div class="name">
+                    <h2>Name</h2>
+                    <p>Lee Gahyun</p>
+                </div>
+                
+                <div class="me">
+                    <h2>About me</h2>
+                    <p></p>
+                </div>
+
+                <div class="experience">
+                    <h2>Experience Overview</h2>
+                    <ul>
+                        <li>Experience 1</li>
+                        <li>Experience 2</li>
+                        <li>Experience 3</li>
+                    </ul>
+                </div>
+
+                <div class="education">
+                    <h2>Education</h2>
+                    <ul>
+                        <li>조선대학교 정보통신공학부(정보보안전공) 2022.03 - 현재</li>
+                        <li>대광여자고등학교 2019.03 - 2022.01</li>
+                    </ul>
+                </div>
+
+                <div class="language">
+                    <h2>Language</h2>
+                    <ul>
+                        <li>한국어</li>
+                        <li>영어(?)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

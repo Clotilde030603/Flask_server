@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mt-4 mb-4">Q&A</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <h5 class="card-title">제목</h5>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <p class="card-text">{{ post[2] }}</p>
+                </div>
+            </div><br>
+
+            <h5 class="card-title">내용</h5>
+            <div class="card mt-3">
+                <div class="card-body">
+                    <p class="card-text">{{ post[3] }}</p>
+                </div>
+            </div><br>
+
+            <h5 class="card-title">첨부 파일</h5>
+            <div class="card mt-3">
+                <div class="card-body">
+                    {% if post[4] %}
+                    <p class="card-text">첨부 파일: <a href="{{ url_for('download_file', category='qna', id=post[0], real_filename=post[4]) }}">{{ post[4] }}</a></p>
+                    {% else %}
+                        <p class="card-text">첨부된 파일이 없습니다.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="text-center"> <!-- Center aligning div -->
+                {% if session['username'] == post[1] %}
+                <!-- 수정 버튼 -->
+                <a href="{{ url_for('edit', category='qna', id=post[0]) }}" class="btn btn-primary mt-3">글 수정</a>
+                
+                <!-- 삭제 버튼 -->
+                <form action="{{ url_for('delete', category='qna', id=post[0]) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger mt-3">글 삭제</button>
+                </form>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

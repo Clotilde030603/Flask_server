@@ -1,0 +1,67 @@
+.portfolio {
+    text-align: center; 
+}
+
+.profile {
+    display: inline-block; 
+    text-align: left; 
+}
+
+.profile-picture {
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 100px;
+    display: inline-block; 
+    vertical-align: middle; 
+}
+
+.profile-picture img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.profile-details {
+    display: inline-block; 
+    text-align: left; 
+    vertical-align: middle;
+    margin-top: 500px;
+}
+
+.me, .name, .experience, .education, .language {
+    width: 100%; 
+    margin-top: 40px;
+    color: rgb(220, 100, 220);
+}
+
+.profile h2, .profile p {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.experience h2, .education h2, .language h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.experience ul, .education ul, .language ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.experience ul li, .education ul li, .language ul li {
+    margin-bottom: 5px;
+}
+
+.experience ul, .education ul, .language ul {
+    list-style-type: circle; 
+    padding: 0;
+    margin-left: 20px;
+}
+
+.experience ul li, .education ul li, .language ul li {
+    margin-bottom: 5px;
+}
+

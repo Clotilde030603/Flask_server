@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if 'username' in session %}
+<h2 style="text-align: center;">Q&A</h2>
+<table style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr style="border-bottom: 1px solid #ddd; text-align: center;">
+            <th style="border: 1px solid #ddd; padding: 8px;">No.</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Username</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Title</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr style="border-bottom: 1px solid #ddd;">
+            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ post[0] }}</td>
+            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ post[1] }}</td>
+            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;"><a href="{{url_for('qna_view', id=post[0])}}"><strong>{{ post[2] }}</strong></a></td>
+            <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ post[3] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table><br>
+<button onclick="window.location.href='/qna_write'">글 작성</button>
+{% endif %}
+{% endblock %}
