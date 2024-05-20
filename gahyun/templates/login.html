@@ -1,26 +1,28 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" />
+        {% if msg %}
+        <script>
+            alert('{{msg}}');
+        </script>
+        {% endif %}
+    </head>
 
-<body>
-    <h1>Login</h1>
+    <body>
+        <h1>Login</h1>
 
-    <form action="/login" method="POST">
-        <label for="id">ID</label><br>
-        <input type="text" id="id" name="id"><br><br>
-        <label for="password">Password</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Login">
-    </form>
-
-</body>
+        <form action="/login" method="POST">
+            <label for="id">ID</label><br />
+            <input type="text" id="id" name="id" /><br /><br />
+            <label for="password">Password</label><br />
+            <input type="password" id="password" name="password" /><br /><br />
+            <input type="submit" value="Login" />
+        </form>
+    </body>
 </html>
 {% endblock %}

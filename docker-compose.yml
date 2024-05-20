@@ -1,20 +1,20 @@
 services:
-  flaskserver:
-    image: gahyun-server
-    build: ./
-    networks:
-      - default
-      - our_net
-    container_name: GahyunServer
-    tty: true
-    cap_add:
-      - ALL
-    privileged: true
-    ports:
-      - 8000:10000
-    volumes:
-      - ./gahyun:/gahyun
+    flaskserver:
+        image: gahyun-server
+        build: ./
+        networks:
+            - default
+            - our_net
+        container_name: GahyunServer
+        tty: true
+        cap_add:
+            - ALL
+        privileged: true
+        ports:
+            - 8000:10000
+        volumes:
+            - ./gahyun:/gahyun
 
 networks:
-  our_net:
-    driver: bridge
+    our_net:
+        driver: bridge

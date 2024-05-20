@@ -36,6 +36,12 @@ def filename_sha_512_hash(data):
     hashed_data = hashlib.sha512(encoded_data).hexdigest()
     return hashed_data
 
+def password_sha_512_hash(data):
+    # 데이터를 UTF-8 인코딩으로 변환하여 해싱합니다.
+    encoded_data = data.encode('utf-8')
+    hashed_data = hashlib.sha512(encoded_data).hexdigest()
+    return hashed_data
+
 # DB 연동
 db_path = "main.db"
 conn = sqlite3.connect(db_path, check_same_thread=False)
@@ -65,6 +71,9 @@ def board_write():
                 return redirect(url_for('error', error=error))
         return render_template('board_write.html')
     elif request.method == 'POST' :
+        if 'username' not in session:
+            error = "Login required"
+            return redirect(url_for('error', error=error))
         try :
             title = request.form['title']
             contents = request.form['contents']
@@ -117,6 +126,9 @@ def board_list():
 # 자유 게시판 글 보는 페이지
 @app.route('/board_view', methods=['GET'])
 def board_view():
+    if 'username' not in session:
+        error = "Login required"
+        return redirect(url_for('error', error=error))
     id = request.args.get('id')
     status = 1
     select_query = """
@@ -159,6 +171,9 @@ def download_file(category, id, real_filename):
 # 삭제
 @app.route('/delete/<category>/<id>', methods=['GET'])
 def delete(category, id):
+    if 'username' not in session:
+        error = "Login required"
+        return redirect(url_for('error', error=error))
     status = 0
     update_query = ""
     username = session['username']
@@ -188,6 +203,9 @@ def delete(category, id):
 def edit(category, id):
     username = session['username']
     if request.method == 'GET':
+        if 'username' not in session:
+            error = "Login required"
+            return redirect(url_for('error', error=error))
         status = 1
         if category == 'board':
             select_query = """
@@ -204,6 +222,9 @@ def edit(category, id):
             post = cur.fetchone() 
             return render_template('qna_edit.html', post=post)
     elif request.method == 'POST':
+        if 'username' not in session:
+            error = "Login required"
+            return redirect(url_for('error', error=error))
         update_query = ""
         title = request.form['title']
         contents = request.form['contents']
@@ -234,8 +255,14 @@ def edit(category, id):
 @app.route('/qna_write', methods=['GET', 'POST'])
 def qna_write():
     if request.method == 'GET' :
+        if 'username' not in session:
+            error = "Login required"
+            return redirect(url_for('error', error=error))
         return render_template('qna_write.html')
     elif request.method == 'POST' :
+        if 'username' not in session:
+            error = "Login required"
+            return redirect(url_for('error', error=error))
         try :
             title = request.form['title']
             contents = request.form['contents']
@@ -283,6 +310,9 @@ def qna_list():
 # qna 글 보기 페이지
 @app.route('/qna_view', methods=['GET'])
 def qna_view():
+    if 'username' not in session:
+        error = "Login required"
+        return redirect(url_for('error', error=error))
     id = request.args.get('id')
     status = 1
     select_query = """
@@ -301,11 +331,28 @@ def login():
         try:
             id = request.form['id']
             password = request.form['password']
-            insert_query = """
+            password = password_sha_512_hash(password)
+            select_query = """
             SELECT id, username, authority FROM user WHERE id = ? AND pw = ?
             """
-            cur.execute(insert_query, (id, password))
+            cur.execute(select_query, (id, password))
             user = cur.fetchone()
+            select_query = """
+            SELECT COUNT(*) FROM login_logs WHERE u_id = ? AND rdate > DATETIME('now', '-30 minute') 
+            """
+            cur.execute(select_query, (id, ))
+            login_logs_count = cur.fetchone()
+            if login_logs_count[0] >= 5 :
+                msg = "5회 이상 틀렸습니다. 30분 뒤에 다시 시도 해주세요!"
+                return render_template('login.html', msg=msg)
+            if user is None:
+                insert_query = """
+                INSERT INTO login_logs (u_id) 
+                VALUES (?)
+                """
+                cur.execute(insert_query, (id))
+                conn.commit()
+                return render_template('login.html')
             session['id'] = user[0]
             session['username'] = user[1]
             session['authority'] = user[2]
@@ -331,13 +378,14 @@ def signup():
             authority = 0
             status = 1
             if password == confirm_password:
+                password = password_sha_512_hash(password)
                 insert_query = """
                 INSERT INTO user (id, username, name, pw, email, phone, authority, status) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """
-            cur.execute(insert_query, (id, username, name, password, email, phone_number, authority, status))
-            conn.commit()
-            return render_template('login.html')
+                cur.execute(insert_query, (id, username, name, password, email, phone_number, authority, status))
+                conn.commit()
+                return render_template('login.html')
         except sqlite3.IntegrityError:
             msg = "회원가입 실패"
             return render_template('signup.html', msg=msg)
@@ -351,4 +399,4 @@ def logout():
 
 # 실행
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=10000, debug=False)
+    app.run('0.0.0.0', port=8000, debug=False)
