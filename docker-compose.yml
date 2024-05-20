@@ -11,7 +11,7 @@ services:
             - ALL
         privileged: true
         ports:
-            - 8000:10000
+            - 8000:8000
         volumes:
             - ./gahyun:/gahyun
 

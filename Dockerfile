@@ -18,7 +18,7 @@ RUN chmod 644 ./main.db
 RUN pip3 install --upgrade pip
 RUN pip3 install Flask
 
-EXPOSE 10000
+EXPOSE 8000
 
 USER GahyunServer
 
